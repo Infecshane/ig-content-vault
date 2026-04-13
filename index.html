@@ -203,6 +203,55 @@ const POSTS = [
         howToUse: "Fill in your own student success stories. Works for anyone selling info products, coaching, or digital courses."
       }
     ]
+  },
+  {
+    id: 4,
+    handle: "@nishantchahar.ai",
+    url: "https://www.instagram.com/p/DWy6cink07s/",
+    title: "LinkedIn Profile Optimization with Claude",
+    subtitle: "5 Prompts That Get Recruiters to Message You",
+    type: "Prompt Carousel",
+    slides: 6,
+    date: "Apr 7, 2026",
+    engagement: "2.6K likes, 244 comments",
+    tags: ["#ai", "#aitools", "#linkedin", "#jobs", "#tech"],
+    color: "from-emerald-500 to-green-600",
+    iconColor: "text-emerald-400",
+    borderColor: "border-emerald-500/30",
+    bgAccent: "bg-emerald-500/10",
+    description: "A 5-prompt framework for using Claude to completely optimize your LinkedIn profile, from headline to experience section, plus cold outreach messages that get recruiter replies.",
+    items: [
+      {
+        name: "The LinkedIn Headline Rewriter",
+        icon: "Target",
+        prompt: "Here is my current LinkedIn profile [paste downloaded LinkedIn data] and my resume [paste resume]. My target role is [mention role]. Rewrite my LinkedIn headline in under 120 characters. It should clearly say what I do, who I help, and what makes me different. Don't use words like passionate or motivated or driven. Make it sound like someone a recruiter would click on immediately. Give me 5 options ranked by how searchable and clickable they are.",
+        howToUse: "Download your LinkedIn data export, paste it with your resume, specify your target role. Claude returns 5 headline options ranked by recruiter search visibility."
+      },
+      {
+        name: "The About Section That Sells You",
+        icon: "Users",
+        prompt: "Here is my LinkedIn profile [paste data], my resume [paste resume], and my target role is [mention role]. Rewrite my About section in first person. Start with a strong opening line that makes someone want to keep reading. Cover what I do, the problems I solve, my key skills relevant to my target role, and one line about what I'm looking for next. Keep it under 2000 characters. Write it like a human talking, not a robot listing achievements. End with a clear line telling recruiters how to reach me.",
+        howToUse: "Paste your profile data and resume. Claude rewrites your About section with a hook, value prop, and CTA for recruiters, all under LinkedIn's 2000-char limit."
+      },
+      {
+        name: "The Cold Referral Message That Gets Replies",
+        icon: "Megaphone",
+        prompt: "I want to reach out to someone working at [company name] for a referral for [role title]. Here is my resume [paste resume]. Write me 3 versions of a LinkedIn message under 300 characters each. Version 1 should be polite and professional. Version 2 should be warm and conversational. Version 3 should lead with a specific compliment about their work. None of them should sound desperate or generic. Each should clearly mention why I'm a fit and make it easy for them to say yes.",
+        howToUse: "Specify the target company, role, and paste your resume. Claude generates 3 message variants (professional, warm, compliment-led) under 300 chars each."
+      },
+      {
+        name: "The Skills and Keywords Optimizer",
+        icon: "BarChart3",
+        prompt: "Here is my LinkedIn profile [paste data] and here are 5 job descriptions for my target role [paste 5 JDs]. Analyze all 5 JDs and extract every repeated skill, keyword, and phrase that recruiters are searching for. Now compare them against my LinkedIn profile. Tell me which keywords I'm missing completely, which ones I have but are buried, and give me the exact order to list my top 15 skills on LinkedIn so I show up in more recruiter searches.",
+        howToUse: "Paste your profile plus 5 job descriptions for your target role. Claude does a gap analysis and gives you an optimized skills order for maximum recruiter search visibility."
+      },
+      {
+        name: "The Experience Section Rewrite",
+        icon: "Rocket",
+        prompt: "Here is my LinkedIn experience section [paste data] and my target role is [mention role]. Rewrite every single experience entry to sound results driven. Use the format: Did X, using Y, which resulted in Z. Add numbers wherever possible. If I haven't mentioned metrics, suggest realistic ones based on the type of work. Make each bullet point scannable and impressive in under 2 lines. Remove any fluff or generic descriptions. A recruiter should read this and immediately think this person delivers.",
+        howToUse: "Paste your experience section and target role. Claude rewrites every bullet using the X-Y-Z results format with quantified metrics."
+      }
+    ]
   }
 ];
 
@@ -377,7 +426,7 @@ function App() {
         </div>
       </div>
       <div className="border-t border-gray-800/50 py-6 text-center text-xs text-gray-600">
-        Captured April 2026 &middot; Sources: @evolving.ai, @gauravhq.ai, @boss.bae.steph
+        Captured April 2026 &middot; Sources: @evolving.ai, @gauravhq.ai, @boss.bae.steph, @nishantchahar.ai
       </div>
     </div>
   );
