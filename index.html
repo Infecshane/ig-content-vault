@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IG Content Vault | Prompt & Playbook Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; margin: 0; background: #030712; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    pre::-webkit-scrollbar { width: 6px; }
+    pre::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+// ââ SVG Icon Components ââ
+const icons = {
+  ChevronLeft: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="m15 18-6-6 6-6"/></svg>,
+  ExternalLink: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>,
+  Copy: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
+  Check: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><polyline points="20 6 9 17 4 12"/></svg>,
+  Instagram: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>,
+  Layers: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>,
+  Zap: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  Target: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+  TrendingUp: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+  BarChart3: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
+  Shield: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+  Rocket: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>,
+  FolderOpen: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>,
+  Settings: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+  Users: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  Clock: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+  FileText: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>,
+  Palette: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>,
+  Eye: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
+  Megaphone: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>,
+  Sparkles: (p) => <svg xmlns="http://www.w3.org/2000/svg" width={p.size||24} height={p.size||24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={p.className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>,
+};
+
+const POSTS = [
+  {
+    id: 1,
+    handle: "@evolving.ai",
+    url: "https://www.instagram.com/p/DWmChlJCAeh/",
+    title: "Claude Can Now Think Like a $100M Startup Founder",
+    subtitle: "Use These 7 Prompts",
+    type: "Prompt Carousel",
+    slides: 9,
+    date: "Apr 1, 2026",
+    engagement: "15.5K likes, 109 comments",
+    tags: ["#ai", "#artificialintelligence", "#technology", "#claude"],
+    color: "from-orange-500 to-amber-600",
+    iconColor: "text-orange-400",
+    borderColor: "border-orange-500/30",
+    bgAccent: "bg-orange-500/10",
+    description: "A 7-prompt framework for using Claude as a strategic thinking partner, covering market analysis, problem prioritization, offer creation, distribution planning, content strategy, competitor mapping, and scaling.",
+    items: [
+      {
+        name: "The Market Breakdown System",
+        icon: "BarChart3",
+        prompt: "Analyze the market for [YOUR NICHE]. Use only specific, data-backed insights. No generic statements.\n\nDeliver exactly four structured sections:\n\n1. Market sizing: TAM, SAM, and SOM with estimated dollar values and your assumptions\n2. Top 5 demand trends: each as a one-line headline + two-sentence explanation\n3. Top 5 underserved opportunities: specific gaps, not broad categories\n4. Follow the money: 3-5 areas where VC, PE, or acquirer capital is actively flowing\n\nFormat each section with a bold heading, then concise bullet points. Total output: under 600 words.",
+        howToUse: "Run this first to ground your strategy in real market data. Replace [YOUR NICHE] with your specific industry or vertical."
+      },
+      {
+        name: "The Problem Prioritization Engine",
+        icon: "Target",
+        prompt: "List the top 10 problems in [YOUR INDUSTRY].\n\nFor each problem, score it on three dimensions:\n- Urgency (1-10): how painful/time-sensitive it is right now\n- Willingness to pay (1-10): how likely buyers are to spend money to solve it today\n- Growth trajectory: 'rising fast', 'stable', or 'declining'\n\nAlso add a 'Complaint signal' column: yes/no for whether this problem surfaces frequently in reviews, forums, or sales calls.\n\nOutput as a table with these exact columns:\n| # | Problem | Urgency | WTP | Trend | Complaint signal | Why it ranks here |\n\nSort by combined Urgency + WTP score, highest first.",
+        howToUse: "Use after the market breakdown to identify which specific problem to build your offer around. The 'Complaint signal' column is the key differentiator."
+      },
+      {
+        name: "The Offer Creation Framework",
+        icon: "Zap",
+        prompt: "Create a high-converting offer for: [YOUR SPECIFIC PROBLEM].\n\nStructure the output exactly like a landing page, with these labeled sections in order:\n\n1. Headline: one bold, benefit-driven statement\n2. ICP: who this is for (age, role, situation, pain level)\n3. Value proposition: the core transformation in one sentence\n4. Offer components: what's included (deliverables, bonuses, format)\n5. Pricing tiers: name, price, and what changes at each tier (low / mid / premium)\n6. Guarantee: specific risk-reversal language the customer sees\n7. Competitive edge: 3 reasons this beats the obvious alternatives\n\nKeep each section tight. No filler. Write it as if it will go directly onto a real landing page.",
+        howToUse: "Feed in the top-ranked problem from Prompt 2. The output gives you a ready-to-deploy offer structure."
+      },
+      {
+        name: "The Distribution Domination Plan",
+        icon: "TrendingUp",
+        prompt: "Act as a senior growth strategist.\n\nBuild a realistic 30-day distribution plan for: [YOUR IDEA, including the target audience, product type, and rough budget].\n\nDeliverables:\n1. Top 5 acquisition channels: ranked by cost-efficiency for this specific audience\n2. Content format per channel: one specific format that works on each (short-form video, cold email sequence, SEO article)\n3. Weekly execution calendar: what happens in weeks 1, 2, 3, and 4 (not day-by-day)\n4. Organic vs paid split: recommended % allocation and rationale\n5. Leverage plays: 2-3 tactics that multiply reach without proportionally more effort (partnerships, repurposing, virality hooks)\n\nBe specific and realistic. Skip tactics that require a large team or $50k+ budget unless the budget context supports it.",
+        howToUse: "Run this after you have your offer locked. Gives you a concrete 30-day launch plan calibrated to your actual budget and team size."
+      },
+      {
+        name: "Viral Content Engine",
+        icon: "Sparkles",
+        prompt: "Create a viral content strategy for: [YOUR NICHE].\n\nDeliver four components:\n1. Hook bank: 10 high-converting hooks (not 20, prioritize quality). For each, label which emotional trigger it uses: fear of missing out, social status, curiosity, or controversy.\n\n2. Content format matrix: a table with these columns:\n| Format | Platform | Ideal length | Why it spreads | Example title |\n\nInclude 6-8 formats across at least 3 platforms.\n\n3. Shareability audit: for each format, answer 'What makes someone forward/repost this?' in one sentence.\n\n4. Repeatable content system: a simple weekly template showing how many posts, which formats, and what rotation keeps the audience engaged without burnout.\n\nOutput with bold section headers. Write the hooks in the voice of the niche, not generic marketing language.",
+        howToUse: "Use this to build a content flywheel that drives organic traffic to your offer. Test the top 3-5 hooks across your primary channel in week one."
+      },
+      {
+        name: "The Competitor Weakness Map",
+        icon: "Shield",
+        prompt: "Analyze the top 5 competitors in [YOUR NICHE, be specific].\n\nFor each competitor, provide a structured row covering:\n- Name + one-line description of their core offer\n- What they do best (their defensible strength)\n- Where they are weak (product gaps, poor reviews, underserved use cases)\n- Which audience they ignore or underserve\n\nThen, based on the patterns across all 5:\n\n- Gap analysis: the 2-3 clearest white spaces no competitor is owning\n- Positioning recommendation: one sharp positioning statement that would differentiate a new entrant\n- Go-to-market angle: which ignored audience + which channel combination represents the fastest path to traction\n\nOutput the competitor breakdown as a table, then the gap analysis and recommendations as prose.",
+        howToUse: "Run this before finalizing your positioning. The gap analysis and go-to-market angle sections tell you exactly where to attack."
+      },
+      {
+        name: "The Scale System",
+        icon: "Rocket",
+        prompt: "Give me a plan to scale this business to [TARGET REVENUE] within [TIMEFRAME]:\n\nBusiness description: [Describe your business in 3-5 sentences. Include: what you sell, who buys it, current monthly revenue, team size, and the biggest bottleneck you're facing right now]\n\nStructure the output as a phased execution roadmap with these four phases:\nPhase 1 - Stabilize (Month 1-2): what to systematize and document before scaling\nPhase 2 - Automate (Month 3-4): top 3 processes to automate, with specific tool recommendations\nPhase 3 - Delegate (Month 5-8): what to hire for first, in order, with rough cost per role\nPhase 4 - Scale (Month 9-12): the growth lever (channel, product, or partnership) that unlocks the next revenue tier\n\nAlso include:\n- Top 3 bottlenecks that will appear at each phase transition\n- One leading metric to track per phase (not vanity metrics)\n\nOutput as a structured roadmap with phase headers, not a generic list.",
+        howToUse: "This is the capstone prompt. Feed in your actual business details, current revenue, and target for a 12-month execution plan."
+      }
+    ]
+  },
+  {
+    id: 2,
+    handle: "@gauravhq.ai",
+    url: "https://www.instagram.com/p/DWrDEflk8gM/",
+    title: "How to Master Claude in One Week",
+    subtitle: "A 10-Step Playbook",
+    type: "Tutorial Carousel",
+    slides: 11,
+    date: "Apr 3, 2026",
+    engagement: "14.1K likes, 111 comments",
+    tags: [],
+    color: "from-red-500 to-rose-600",
+    iconColor: "text-red-400",
+    borderColor: "border-red-500/30",
+    bgAccent: "bg-red-500/10",
+    description: "A step-by-step setup guide for getting the most out of Claude's desktop app, specifically Cowork mode. Covers installation, folder structure, file strategy, prompt templates, plugins, connectors, team projects, and task automation.",
+    items: [
+      { name: "Download the Desktop App", icon: "Rocket", details: "Go to claude.com/download (the actual app, not the website). Mac or Windows only. Cowork only runs inside the desktop app: no app = no Cowork. Pro account: $20/mo ($17/mo annually).", keyPoint: "Cowork mode is the differentiator. Without the desktop app, you're using Claude as a basic chat tool." },
+      { name: "Know Which Mode to Use", icon: "Layers", details: "Chat: quick questions. Projects: team use and recurring deliverables. Cowork: solo deep work with actual files. Code: developers only.", keyPoint: "For real work, use Cowork. Chat is the ChatGPT equivalent." },
+      { name: "Build Your 4 Folders", icon: "FolderOpen", details: "Create a parent folder 'Claude-Cowork' with 4 subfolders: About Me (identity + writing rules), Projects (one subfolder per live project), Templates (best past work as reusable structure), Claude Outputs (the ONLY folder Claude writes to).", keyPoint: "Structure your file system before you start working." },
+      { name: "Write Your 2 Core Files", icon: "FileText", details: "about-me.md: who you are, what you do, current priorities, what matters now. anti-ai-style.md: every phrase Claude must NEVER use ('boundaries', 'delve', 'it's worth noting').", keyPoint: "One great .md file beats 50 random uploads. Be intentional." },
+      { name: "Stop Writing Prompts", icon: "Zap", details: "Use one master template loaded with your context every time. Template reads full ABOUT ME before every task. On Mac: use Text Shortcut, type /prompt to expand anywhere. Write only to CLAUDE OUTPUTS.", keyPoint: "Replace ad-hoc prompts with a master template." },
+      { name: "Let Claude Prompt You", icon: "Target", details: "Flip the script. Claude asks the questions, you click answers. Multi-select descriptions, drag-to-rank priorities. You click in under a minute, Claude plans, you approve, it executes.", keyPoint: "Let Claude drive the Q&A process." },
+      { name: "Install One Plugin", icon: "Settings", details: "Browse plugins to add a sidebar. Marketing (/marketing draft-content), Data (CSV + dashboards), Legal (contract review). Start with one, master it, then expand.", keyPoint: "Don't overwhelm yourself. Master it first, then expand." },
+      { name: "Connect Your Tools", icon: "Layers", details: "Settings > Connectors > Browse > Add. Connectors = Claude acts inside your apps. Plugins = you do the work (Claude assists). Claude can search Slack, pull from Docs, reference Notion mid-task.", keyPoint: "Connect Google, Notion, Slack. Claude becomes a co-worker who knows your stack." },
+      { name: "Build One Project for Your Team", icon: "Users", details: "Create a shared Project with global instructions. Include brief + drafts + references subfolder per live project. Claude works for your whole team, not just you.", keyPoint: "One well-structured project turns Claude from a personal tool into a team multiplier." },
+      { name: "Schedule Your First Automated Task", icon: "Clock", details: "Use the /schedule plugin for recurring Cowork tasks. Write your Cowork prompt in full. Claude runs it before you wake up. You wake up to a briefing doc.", keyPoint: "The endgame: Claude works while you sleep." }
+    ]
+  },
+  {
+    id: 3,
+    handle: "@boss.bae.steph",
+    url: "https://www.instagram.com/p/DWCavcllFFG/",
+    title: "Gary Vaynerchuk's Instagram Rules as Claude Prompts",
+    subtitle: "Content That Sells Digital Products",
+    type: "Prompt Carousel",
+    slides: 10,
+    date: "Mar 18, 2026",
+    engagement: "5.4K likes, 810 comments",
+    tags: [],
+    color: "from-purple-500 to-fuchsia-600",
+    iconColor: "text-purple-400",
+    borderColor: "border-purple-500/30",
+    bgAccent: "bg-purple-500/10",
+    gated: 'Comment "PAYDAY" on the original post to access free training',
+    description: "Six of Gary Vaynerchuk's core Instagram content rules, each translated into a ready-to-use Claude prompt. Designed for digital product sellers and content creators who want to build audience and drive sales using Claude as their content engine.",
+    items: [
+      {
+        name: "Rule 1: Document, Don't Create",
+        icon: "Eye",
+        prompt: "I want to document my journey of [what you do/teach] on Instagram without it feeling forced or performative. Give me 20 content ideas based purely on things I already know and do every day as someone who [your expertise/background]. Each idea should feel like a behind-the-scenes look at my real process. No tutorials. No how-to guides. Just real, raw documentation of what I actually do. Format as post ideas with a one-line hook for each.",
+        howToUse: "Replace the bracketed sections with your actual niche and background. Generates a month's worth of authentic content ideas."
+      },
+      {
+        name: "Rule 2: Jab Jab Jab Right Hook",
+        icon: "Megaphone",
+        prompt: "I sell a digital product called [product name] on Instagram. Using Gary Vaynerchuk's jab jab jab right hook framework, create a 4-post content sequence for me. Post 1 (jab): pure value, teach something useful, no CTA. Post 2 (jab): relatable story that builds trust, no CTA. Post 3 (jab): myth busting content that positions me as the authority, soft CTA only. Post 4 (right hook): direct sell post for my digital product with a clear CTA to comment [keyword]. Write all 4 posts in full. Tone: warm, authentic, big sister energy.",
+        howToUse: "Plug in your product name and keyword. Complete 4-post sales sequence: 3 value, 1 sell. Run weekly."
+      },
+      {
+        name: "Rule 3: Context is God",
+        icon: "Palette",
+        prompt: "I have this piece of content: [paste your content]. Help me adapt it specifically for Instagram in 2026. Tell me: (1) what format works best for this content on Instagram right now (reel, carousel, single image, story), (2) rewrite the hook specifically for Instagram's scroll behavior, (3) what text-on-screen should say if it becomes a reel, (4) what the caption should look like for Instagram specifically, (5) what CTA works best on Instagram for this type of content. Be specific about what makes Instagram different from other platforms right now.",
+        howToUse: "Take any existing content (blog post, email, tweet, video script) and feed it in. Claude adapts it for Instagram's specific format."
+      },
+      {
+        name: "Rule 4: Attention is Your Most Valuable Asset",
+        icon: "Eye",
+        prompt: "I want to create an Instagram carousel that stops people from scrolling and makes them realize they are wasting their most valuable asset: their attention. My audience are people stuck in a 9-5 who spend hours scrolling but have never monetized their own attention. Create a 9-slide carousel that: opens with a pattern interrupt hook about attention, walks through how much time they spend consuming vs creating, shows them what is possible if they redirected just 2 hours of that attention, and ends with a soft CTA to comment [keyword]. Make it hit emotionally, not just logically.",
+        howToUse: "Customize for your audience's specific situation. Powerful hook for anyone selling to employed professionals."
+      },
+      {
+        name: "Rule 5: Stop Consuming, Start Creating",
+        icon: "Sparkles",
+        prompt: "Write a short-form Instagram Reel script (under 60 seconds) based on this concept: most people consume content all day but never create anything. I want to challenge my audience to flip that ratio. The script should: open with a bold statement that stops the scroll, use a simple before/after contrast (consumer vs creator), share one specific example of what creating looks like in my niche [your niche], and end with a CTA to comment [keyword] for my free training. Include text-on-screen suggestions for each part. Tone: direct but warm, like a friend calling you out lovingly.",
+        howToUse: "Insert your niche. Produces a complete Reel script with text overlays ready to film."
+      },
+      {
+        name: "Rule 6: Social Media is the Great Equalizer",
+        icon: "TrendingUp",
+        prompt: "I want to create an Instagram carousel that speaks to people who feel like they are too late, too small, or too unknown to make money selling digital products online. Using the concept that social media levels the playing field for everyone, create a 9-slide carousel that: opens with a bold hook challenging the idea that you need a big audience, shares 3 real examples of people who started with nothing (I will fill in my student wins), explains exactly what matters more than follower count, and ends with a CTA to comment [keyword]. Make the reader feel seen, not sold to.",
+        howToUse: "Fill in your own student success stories. Works for anyone selling info products, coaching, or digital courses."
+      }
+    ]
+  }
+];
+
+const iconMap = icons;
+
+function IconComponent({ name, className }) {
+  const Icon = iconMap[name] || iconMap.Zap;
+  return <Icon className={className} size={18} />;
+}
+
+function PromptBlock({ prompt, copied, onCopy }) {
+  return (
+    <div className="relative group">
+      <pre className="bg-gray-900/80 border border-gray-700/50 rounded-lg p-4 text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-64 overflow-y-auto">{prompt}</pre>
+      <button onClick={onCopy} className="absolute top-3 right-3 p-1.5 rounded-md bg-gray-800 border border-gray-600/50 hover:bg-gray-700 transition-colors">
+        {copied ? <icons.Check size={14} className="text-green-400" /> : <icons.Copy size={14} className="text-gray-400" />}
+      </button>
+    </div>
+  );
+}
+
+function PostDetail({ post, onBack }) {
+  const [copiedIdx, setCopiedIdx] = useState(null);
+  const handleCopy = (text, idx) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIdx(idx);
+    setTimeout(() => setCopiedIdx(null), 2000);
+  };
+  const isPromptType = post.items[0]?.prompt;
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      <div className={`bg-gradient-to-br ${post.color} px-6 py-8`}>
+        <button onClick={onBack} className="flex items-center gap-1.5 text-white/80 hover:text-white mb-6 text-sm font-medium transition-colors">
+          <icons.ChevronLeft size={16} /> Back to all posts
+        </button>
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-semibold uppercase tracking-wider bg-white/20 px-2.5 py-1 rounded-full">{post.type}</span>
+            <span className="text-xs text-white/70">{post.slides} slides</span>
+          </div>
+          <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+          <p className="text-white/80 text-lg mb-4">{post.subtitle}</p>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
+            <span>{post.handle}</span>
+            <span>{post.date}</span>
+            <span>{post.engagement}</span>
+            <a href={post.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-white/90 hover:text-white">
+              View on IG <icons.ExternalLink size={12} />
+            </a>
+          </div>
+          {post.gated && (
+            <div className="mt-4 bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-sm">
+              <span className="font-semibold">Gated:</span> {post.gated}
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 mb-8">
+          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Overview</h3>
+          <p className="text-gray-300 leading-relaxed">{post.description}</p>
+        </div>
+        <h2 className="text-xl font-bold mb-6">{isPromptType ? `The ${post.items.length} Prompts` : `The ${post.items.length} Steps`}</h2>
+        <div className="space-y-6">
+          {post.items.map((item, idx) => (
+            <div key={idx} className={`border ${post.borderColor} rounded-xl overflow-hidden bg-gray-900/30`}>
+              <div className="px-5 py-4 flex items-start gap-3">
+                <div className={`mt-0.5 w-8 h-8 rounded-lg ${post.bgAccent} flex items-center justify-center flex-shrink-0`}>
+                  <IconComponent name={item.icon} className={post.iconColor} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-gray-500">{String(idx + 1).padStart(2, "0")}</span>
+                    <h3 className="font-semibold text-white">{item.name}</h3>
+                  </div>
+                </div>
+              </div>
+              <div className="px-5 pb-5">
+                {item.prompt ? (
+                  <>
+                    <PromptBlock prompt={item.prompt} copied={copiedIdx === idx} onCopy={() => handleCopy(item.prompt, idx)} />
+                    <p className="mt-3 text-sm text-gray-400 leading-relaxed"><span className="font-semibold text-gray-300">How to use:</span> {item.howToUse}</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-gray-300 text-sm leading-relaxed mb-3">{item.details}</p>
+                    <div className={`${post.bgAccent} border ${post.borderColor} rounded-lg px-4 py-2.5 text-sm`}>
+                      <span className={`font-semibold ${post.iconColor}`}>Key takeaway:</span>{" "}
+                      <span className="text-gray-300">{item.keyPoint}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PostCard({ post, onClick }) {
+  return (
+    <button onClick={onClick} className={`w-full text-left border ${post.borderColor} rounded-2xl overflow-hidden bg-gray-900/40 hover:bg-gray-900/70 transition-all duration-200 hover:scale-[1.01] group`}>
+      <div className={`h-2 bg-gradient-to-r ${post.color}`} />
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${post.color} flex items-center justify-center`}>
+              <icons.Instagram size={16} className="text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">{post.handle}</p>
+              <p className="text-xs text-gray-500">{post.date}</p>
+            </div>
+          </div>
+          <span className="text-xs font-medium bg-gray-800 text-gray-400 px-2.5 py-1 rounded-full">{post.type}</span>
+        </div>
+        <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gray-100">{post.title}</h3>
+        <p className="text-sm text-gray-400 mb-4">{post.subtitle}</p>
+        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">{post.description}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span>{post.slides} slides</span>
+            <span>{post.items.length} {post.items[0]?.prompt ? "prompts" : "steps"}</span>
+          </div>
+          <span className={`text-xs font-medium ${post.iconColor} group-hover:translate-x-0.5 transition-transform`}>View details &rarr;</span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function App() {
+  const [activePost, setActivePost] = useState(null);
+  if (activePost) {
+    return <PostDetail post={activePost} onBack={() => setActivePost(null)} />;
+  }
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-purple-500/5 to-rose-500/5" />
+        <div className="relative max-w-4xl mx-auto px-6 py-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-gray-800/60 border border-gray-700/50 rounded-full px-4 py-1.5 mb-6">
+            <icons.Instagram size={14} className="text-pink-400" />
+            <span className="text-xs font-medium text-gray-300">Instagram Content Breakdown</span>
+          </div>
+          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+            Prompt & Playbook Vault
+          </h1>
+          <p className="text-gray-400 max-w-xl mx-auto leading-relaxed">
+            Captured breakdowns from top AI creators on Instagram. Each card contains the full prompts, frameworks, and step-by-step instructions, ready to copy and execute.
+          </p>
+          <div className="flex items-center justify-center gap-6 mt-8 text-sm text-gray-500">
+            <div className="flex items-center gap-1.5"><icons.Layers size={14} className="text-orange-400" /><span>{POSTS.length} posts captured</span></div>
+            <div className="flex items-center gap-1.5"><icons.Zap size={14} className="text-purple-400" /><span>{POSTS.reduce((a, p) => a + p.items.length, 0)} prompts & steps</span></div>
+          </div>
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto px-6 pb-16">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {POSTS.map((post) => (
+            <PostCard key={post.id} post={post} onClick={() => setActivePost(post)} />
+          ))}
+          <div className="border border-dashed border-gray-700/50 rounded-2xl flex flex-col items-center justify-center p-8 text-center min-h-[280px]">
+            <div className="w-12 h-12 rounded-full bg-gray-800/50 flex items-center justify-center mb-3">
+              <icons.Instagram size={20} className="text-gray-600" />
+            </div>
+            <p className="text-sm font-medium text-gray-500 mb-1">Next Capture</p>
+            <p className="text-xs text-gray-600">Share an IG link to add a new card</p>
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-gray-800/50 py-6 text-center text-xs text-gray-600">
+        Captured April 2026 &middot; Sources: @evolving.ai, @gauravhq.ai, @boss.bae.steph
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+</body>
+</html>
