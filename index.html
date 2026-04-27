@@ -747,6 +747,32 @@
           { name: "Growth Plan Mapping", icon: "TrendingUp", prompt: "[Caption indicates a growth-plan prompt. Full text not captured - see original post.]", howToUse: "Map the path from MVP to scale." },
           { name: "Prompts 5-7 (Not Captured)", icon: "FileText", prompt: "[Full carousel content not extracted. Refer to the original post for prompts 5-7 verbatim.]", howToUse: "Re-capture full carousel content." }
         ]
+      },
+      {
+        id: 28,
+        handle: "@thewizeai",
+        url: "https://www.instagram.com/p/DXkC_7DDR6W/",
+        title: "$15,000 AI Security Auditor Prompt",
+        subtitle: "Run Before You Ship Vibecoded Code",
+        type: "Prompt Carousel",
+        slides: 9,
+        date: "Apr 26, 2026",
+        engagement: "446 likes, 0 comments",
+        tags: ["#vibecoding", "#aisecurity", "#securityaudit", "#cybersecurity"],
+        color: "from-red-500 to-rose-600",
+        iconColor: "text-red-400",
+        borderColor: "border-red-500/30",
+        bgAccent: "bg-red-500/10",
+        description: "One multi-section prompt that turns an AI coding agent into a senior security engineer running a red team audit before deploy. Targets vibecoders shipping fast without auth checks, input validation, or visibility into what's exposed. Seven sections cover scope, threat model, auth/input, data/API, infrastructure, advanced threats, and structured findings output.",
+        items: [
+          { name: "Role + Audit Scope", icon: "Shield", prompt: "Act as a senior security engineer and red team specialist. Perform a comprehensive, adversarial security audit of the following codebase. Assume the system will be deployed in a hostile environment with motivated attackers. Analyze the system across all layers, including: Frontend (UI, client logic, browser storage). Backend (APIs, business logic, services). Authentication and authorization flows. Database interactions and storage. Infrastructure and deployment assumptions. Third party integrations and dependencies.", howToUse: "Paste this as the opening of the prompt. Sets the persona and tells the agent what surfaces to cover. Run before every deploy." },
+          { name: "Core Objectives + Threat Model", icon: "Target", prompt: "Using the codebase from the previous audit scope, identify vulnerabilities across all severity levels. Detect logic flaws, not just known patterns. Surface chained attack paths. Highlight unknown or unconventional weaknesses. Assume attacker creativity beyond standard checklists. Build a threat model: Define possible attacker profiles (anonymous user, authenticated user, insider, API consumer). Identify entry points and trust boundaries. Map out sensitive assets (data, tokens, permissions, secrets).", howToUse: "Forces the agent past checklist scanning into adversarial reasoning. The threat model output is what separates a real audit from a linter pass." },
+          { name: "Auth + Input Handling", icon: "Eye", prompt: "Now audit authentication and input handling. Check for (but do NOT limit yourself to): Authentication & Authorization: Broken auth, weak session management. Privilege escalation (vertical and horizontal). Insecure password reset flows. Token leakage or reuse. Input Handling: Injection attacks (SQL, NoSQL, OS command, template injection). XSS (stored, reflected, DOM based). CSRF vulnerabilities. File upload exploits.", howToUse: "Covers the OWASP-adjacent attack surface most vibecoded apps ship without checking. The 'do NOT limit yourself' phrasing keeps the agent from shrinking the scope." },
+          { name: "Data Security + API Logic", icon: "Layers", prompt: "Next, audit data security and backend logic across the codebase: Data Security: Sensitive data exposure. Weak encryption or misuse of cryptography. Hardcoded secrets or keys. Insecure storage (localStorage, cookies, logs). API & Backend Logic: Broken object level authorization (IDOR/BOLA). Mass assignment vulnerabilities. Rate limiting issues / brute force risks. Business logic abuse (race conditions, double spending, bypassing checks).", howToUse: "Catches the silent killers: hardcoded secrets, IDOR, race conditions. These are the issues that pass functional tests but fail security review." },
+          { name: "Infrastructure + Dependencies", icon: "Settings", prompt: "Now audit infrastructure configuration and third party dependencies: Infrastructure & Configuration: Misconfigured headers (CORS, CSP, HSTS). Open ports, debug endpoints, admin panels. Environment variable leaks. Cloud/storage misconfigurations. Dependencies & Supply Chain: Vulnerable packages. Unsafe imports or execution. Malicious dependency risks.", howToUse: "Especially relevant for AI-assisted code, where dependencies get auto-imported without audit. Run alongside npm audit or pip-audit for full coverage." },
+          { name: "Advanced Threats + Mindset", icon: "Zap", prompt: "Go beyond standard checklists. Actively attempt to discover: Non obvious logic flaws unique to this system. Feature abuse scenarios. State desynchronization issues. Cache poisoning. Replay attacks. Timing attacks. Multi step exploit chains combining low severity issues. Any behavior that 'shouldn't be possible' but is. Think like an attacker trying to break assumptions. Attempt to bypass validations and safeguards. Manipulate edge cases and unexpected inputs. Explore how different components interact under stress.", howToUse: "This is the section that surfaces chained exploits, the kind that turn three medium findings into one critical. Don't skip it." },
+          { name: "Output Format + Rules", icon: "FileText", prompt: "Present your complete audit findings in this format: 1. Vulnerability Summary (total issues by severity). 2. Detailed Findings (title, severity, affected component, description, exploitation scenario, impact, recommended fix). 3. Attack Chains (show how multiple minor issues could be combined into a major exploit). 4. Secure Design Recommendations (architectural improvements and safer patterns). Do NOT assume the code is safe. Do NOT skip analysis due to missing context, infer risks where needed. Be exhaustive and PARANOID in your review. If unsure, flag it as a potential risk and explain why.", howToUse: "Forces structured, severity-ranked output you can actually triage. The 'PARANOID' instruction is critical: it stops the agent from waving off findings as 'unlikely.'" }
+        ]
       }
     ];
 
