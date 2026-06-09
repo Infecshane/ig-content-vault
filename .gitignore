@@ -1,0 +1,19 @@
+# env / secrets
+.env*
+*.pem
+*.key
+credentials*.json
+
+# deps
+node_modules/
+
+# build artifacts
+/build
+/dist
+/out
+*.log
+
+# misc
+.DS_Store
+.vscode/
+.idea/
