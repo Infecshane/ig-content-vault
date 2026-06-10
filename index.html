@@ -1072,6 +1072,83 @@
           { name: "9. Production Security Audit", icon: "Shield", prompt: "Act like a senior security engineer auditing a production application.\n\nCarefully inspect the system for:\n- Security vulnerabilities\n- Authentication flaws\n- API weaknesses\n- Injection risks\n- Sensitive data exposure\n- Infrastructure risks\n\nThen provide:\n- Vulnerability report\n- Severity levels\n- Attack scenarios\n- Secure implementation fixes\n- Production-grade recommendations\n\nMost people never ask Claude to think like a security engineer. That's a huge mistake.", howToUse: "Run on any app handling user data, payments, or auth before shipping. Pair with /verify or external tooling for anything actually production-bound — never ship purely on AI security review." },
           { name: "10. Senior DevOps + Deployment Engineer", icon: "FolderOpen", prompt: "Act like a senior DevOps engineer preparing this application for real production deployment.\n\nYour job:\n- Design deployment architecture\n- Configure CI/CD\n- Setup monitoring/logging\n- Improve reliability\n- Reduce downtime risks\n- Optimize scaling\n\nProvide:\n- Infrastructure architecture\n- Deployment workflow\n- CI/CD pipeline\n- Docker/Kubernetes setup\n- Monitoring strategy\n- Production deployment checklist\n\nThis is where Claude becomes genuinely dangerous.", howToUse: "Run when wiring up a new project's deployment story or hardening an existing one. The output gives you the CI/CD scaffolding and the checklist to verify it." }
         ]
+      },
+      {
+        id: 38,
+        handle: "@tryfuturelot",
+        url: "https://www.instagram.com/p/DZDOSqqAna-/",
+        title: "FutureLot: Generate Professional Site Plans in Minutes",
+        subtitle: "AI site-plan tool for builders — no CAD, no complicated software",
+        type: "Tool Demo",
+        slides: 1,
+        date: "Jun 1, 2026",
+        engagement: "45 likes, 0 comments",
+        tags: ["#construction", "#sitedesign", "#proptech", "#ai", "#builders"],
+        color: "from-emerald-500 to-teal-600",
+        iconColor: "text-emerald-400",
+        borderColor: "border-emerald-500/30",
+        bgAccent: "bg-emerald-500/10",
+        description: "A short product-demo reel from FutureLot (@tryfuturelot) showing a browser-based tool that generates professional site plans for builders without CAD software. Captured as a tool reference, not a prompt: it's a single-frame demo, so what's logged is the value proposition and where it fits, not step-by-step content.",
+        items: [
+          { name: "What It Does", icon: "Rocket", details: "Browser-based tool that generates professional construction/development site plans in minutes. Pitched at builders and developers who don't want to run CAD or learn complicated drafting software. The reel shows a site plan being produced inside a web app from a simple input.", keyPoint: "Positioned as a no-CAD shortcut — presentable site plan fast, aimed at speed-to-qualify rather than construction-grade drafting." },
+          { name: "Where It Fits", icon: "Target", details: "Relevant as a competitor/inspiration reference for construction-tech and proptech ventures. The hook ('professional site plans in minutes, no CAD') is a clean example of a speed-and-simplicity value prop aimed at non-technical builders.", keyPoint: "Thin on substance (it's an ad), but the positioning and hook are worth keeping for construction-tech market mapping." }
+        ]
+      },
+      {
+        id: 39,
+        handle: "@foundedceo",
+        url: "https://www.instagram.com/p/DY5Yt7hH5Eo/",
+        title: "Y Combinator Reveals How to Build a Startup From Scratch Using AI",
+        subtitle: "YC GP Diana Hu's 8-principle playbook for AI-native companies",
+        type: "Framework Carousel",
+        slides: 3,
+        date: "May 28, 2026",
+        engagement: "5.8K likes, 87 comments",
+        tags: ["#ycombinator", "#ai", "#startups", "#founders", "#aifirst"],
+        color: "from-red-500 to-rose-600",
+        iconColor: "text-red-400",
+        borderColor: "border-red-500/30",
+        bgAccent: "bg-red-500/10",
+        description: "A repackaging of Y Combinator General Partner Diana Hu's playbook for building AI-native companies from the ground up. Eight principles describe what a company built in 2026 is supposed to look like: AI as the operating system, closed-loop processes, queryable orgs, software factories, no human middleware, three new employee archetypes, token-max over headcount-max, and the structural advantage early-stage startups hold over incumbents.",
+        items: [
+          { name: "1. AI as Operating System, Not Tool", icon: "Settings", details: "AI shouldn't be a tool your company occasionally uses — it should be the OS your company runs on. Every workflow, decision, and process flows through an intelligent layer. The right person with AI tools can now build features that used to require an entire team.", keyPoint: "Reframe AI from a productivity add-on to the substrate the whole company runs on." },
+          { name: "2. Closed Loops Everywhere", icon: "Zap", details: "Old companies ran on open loops: you made a decision, executed, and never systematically measured the outcome. A closed loop is self-regulating — it continuously monitors its output and adjusts to better hit the stated goal. Every important process should be captured by an intelligent closed loop that records information, feeds it back, and improves over time.", keyPoint: "Build processes that measure their own outcomes and self-correct, instead of one-and-done decisions." },
+          { name: "3. Make Your Company Queryable", icon: "Eye", details: "The whole organization should be legible to AI. Every important action should produce an artifact the AI at the center of the company can learn from: record meetings with AI notetakers, embed agents in comms, build custom dashboards over everything (revenue, sales, engineering, hiring, ops), and give models as much context as you'd give an employee.", keyPoint: "If the AI can't query it, it can't act on it — instrument the whole company as data." },
+          { name: "4. Software Factories", icon: "Layers", details: "The next evolution of test-driven development: humans write a spec and a set of tests that define success, then AI agents generate the implementation and iterate until the tests pass. The human defines what to build and judges the output; writing the actual code is the agent's job. Some companies already have repos that contain no handwritten code, just specs and test harnesses.", keyPoint: "Humans own the spec and the judging; agents own the implementation loop." },
+          { name: "5. No More Human Middleware", icon: "Users", details: "The classic management hierarchy no longer makes sense. If your company is queryable, artifact-rich, and legible to AI, you should have almost no human middleware. Your company's velocity is only as fast as its information flow — every layer of human routing you remove is a direct speed gain.", keyPoint: "Humans relaying information between layers is friction; remove the routing, gain the speed." },
+          { name: "6. Three Employee Archetypes (per Jack Dorsey)", icon: "Users", details: "IC / builder-operator: directly makes and runs things — not limited to engineers, everyone builds and comes to meetings with working prototypes, not pitch decks. DRI (directly responsible individual): owns strategy and customer outcomes, one person, one outcome, no hiding. AI founder: still builds, still coaches, leads by example — if you're the founder, keep AI at the forefront rather than delegating it to someone else.", keyPoint: "Roles collapse into builders, single-owner DRIs, and a founder who personally drives AI." },
+          { name: "7. Token-Max, Not Headcount-Max", icon: "TrendingUp", details: "Maximizing token usage, not headcount, becomes the critical shift. The best companies will be the ones token-maxing — willing to run an uncomfortably high API bill because it's replacing what would have been far more expensive and inflated headcount. The result is dramatically leaner engineering, design, HR, and admin teams.", keyPoint: "Spend on compute instead of headcount — a high API bill is cheaper than the team it replaces." },
+          { name: "8. The Early-Stage Advantage", icon: "Rocket", details: "Startups don't carry legacy systems, org charts, or thousands of people to retrain. Incumbents have to maintain a live product while unwinding years of standard operating procedures — every change risks breaking something that already works. Startups can design their systems, workflows, and culture around AI from the start and operate thousands of times faster. You can't outsource your conviction here: you have to develop it by actually sitting with coding agents and using them.", keyPoint: "No legacy to unwind is the startup's structural edge — but only if the founder builds with the tools personally." }
+        ]
+      },
+      {
+        id: 40,
+        handle: "Sent image (source unknown)",
+        url: "",
+        title: "The Construction Tech Stack: 2026 Buyer Trends",
+        subtitle: "50+ vendors mapped across 10 construction software categories",
+        type: "Reference",
+        slides: 1,
+        date: "Jun 10, 2026",
+        engagement: "Sent directly (no IG stats)",
+        tags: ["#construction", "#constructiontech", "#proptech", "#software", "#buyertrends"],
+        color: "from-purple-500 to-fuchsia-600",
+        iconColor: "text-purple-400",
+        borderColor: "border-purple-500/30",
+        bgAccent: "bg-purple-500/10",
+        description: "A single-image market map of the 2026 construction technology landscape, organizing 50+ vendors into 10 software categories (research described as based on real buyer data). A fast reference for who the players are in each construction software segment: project management, estimating, field logs, BIM, safety, equipment, accounting, workforce, docs, and BI.",
+        items: [
+          { name: "Project Management", icon: "Layers", details: "Procore, Autodesk Construction Cloud, Primavera (Oracle), CMiC, Touchplan.", keyPoint: "Procore and Autodesk CC anchor the category; Primavera/CMiC skew to large/complex projects, Touchplan to lean scheduling." },
+          { name: "Estimating & Precon", icon: "BarChart3", details: "ProEst, STACK, PlanSwift, Sage Estimating, HeavyBid.", keyPoint: "Takeoff and estimating; HeavyBid skews heavy-civil, the rest general contracting." },
+          { name: "Field & Daily Logs", icon: "FileText", details: "Fieldwire, Autodesk Build, Raken, SafetyCulture, Fulcrum.", keyPoint: "Mobile-first field execution and daily reporting; Raken specializes in daily logs." },
+          { name: "BIM & Design", icon: "Palette", details: "Revit, Navisworks, Trimble Connect, Tekla, ArchiCAD.", keyPoint: "Autodesk (Revit/Navisworks) dominates; Tekla owns structural/steel, ArchiCAD is the architect alternative." },
+          { name: "Safety & Compliance", icon: "Shield", details: "SafetyCulture, SafeSite, ComplianceQuest, Contractor Compliance, Procore Safety.", keyPoint: "Inspections, incident tracking, and subcontractor compliance management." },
+          { name: "Equipment & Fleet", icon: "Settings", details: "Tenna, HeavyEquipment360, Trackunit, B2W Track, Trimble.", keyPoint: "Telematics and asset tracking for owned/rented fleets; Trackunit and Trimble are the telematics heavyweights." },
+          { name: "Job Cost Accounting", icon: "TrendingUp", details: "Sage 300 CRE, Viewpoint Vista, CMiC, NetSuite, Deltek.", keyPoint: "Construction-specific ERP/accounting; Sage 300 CRE and Viewpoint Vista are the incumbents." },
+          { name: "Workforce & Time", icon: "Clock", details: "busybusy, ExakTime, Bridgit Bench, hh2, Arcoro.", keyPoint: "Time tracking, workforce planning (Bridgit Bench), and HR/payroll bridges (hh2, Arcoro)." },
+          { name: "Docs & Plan Rooms", icon: "FolderOpen", details: "Bluebeam, Aconex, PlanGrid, Procore Docs, Pype.", keyPoint: "Drawing markup (Bluebeam), plan rooms, and submittal/closeout automation (Pype)." },
+          { name: "Analytics & BI", icon: "Eye", details: "briq, Power BI, Procore Analytics, Autodesk Insight, Domo.", keyPoint: "Financial and project analytics; briq is construction-specific, Power BI/Domo the general BI layer." }
+        ]
       }
     ];
 
